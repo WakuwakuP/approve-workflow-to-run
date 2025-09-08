@@ -45,14 +45,20 @@ jobs:
 ## Execution Flow
 
 1. **Main Step** (`dist/index.js`): Initializes the action, validates inputs, and prepares the GitHub API client
-2. **Post Step** (`dist/post.js`): Handles workflow approval for pull request events (always executes, regardless of main step outcome)
+2. **Post Step** (`dist/post.js`): Handles workflow approval for any event type (always executes, regardless of main step outcome)
 
-### Pull Request Workflow Approval
+### Workflow Approval
 
-When triggered by a pull request event (`pull_request` or `pull_request_target`), the post step will:
+The post step will check for and approve workflow runs that are waiting for approval:
+
+**For pull request events** (`pull_request` or `pull_request_target`):
 1. Check for workflow runs that are waiting for approval
 2. Filter workflow runs associated with the current pull request
 3. Automatically approve those workflow runs using the GitHub API
+
+**For other event types** (such as `workflow_dispatch`, `push`, `schedule`, etc.):
+1. Check for workflow runs that are waiting for approval
+2. Automatically approve all waiting workflow runs for the event type
 4. Log the approval results
 
 The post step has access to the main step's execution result through saved state and can perform operations such as:
