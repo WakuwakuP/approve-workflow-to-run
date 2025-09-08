@@ -28,7 +28,12 @@ async function run() {
     // Set outputs
     core.setOutput('result', 'success');
     
+    // Save state for post step
+    core.saveState('main-result', 'success');
+    
   } catch (error) {
+    // Save error state for post step
+    core.saveState('main-result', 'failed');
     core.setFailed(`Action failed with error: ${error.message}`);
   }
 }

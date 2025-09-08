@@ -31837,45 +31837,38 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(7484);
 const github = __nccwpck_require__(3228);
 
-async function run() {
+async function runPost() {
   try {
-    // Get inputs
-    const githubToken = core.getInput('github-token');
-    const workflowName = core.getInput('workflow-name');
-    
-    // Log the action start
-    core.info('🚀 Starting approve-workflow-to-run action');
+    // Log the post action start
+    core.info('🧹 Starting post-step for approve-workflow-to-run action');
     
     // Get GitHub context
     const context = github.context;
-    core.info(`Repository: ${context.repo.owner}/${context.repo.repo}`);
+    core.info(`Post-step cleanup for: ${context.repo.owner}/${context.repo.repo}`);
     
-    if (workflowName) {
-      core.info(`Workflow name: ${workflowName}`);
-    }
+    // Get the main step result if available
+    const mainResult = core.getState('main-result') || 'unknown';
+    core.info(`Main step result: ${mainResult}`);
     
-    // Create octokit client
-    const octokit = github.getOctokit(githubToken);
+    // Perform cleanup tasks
+    core.info('Performing cleanup tasks...');
     
-    // Basic action logic - this is a placeholder for actual workflow approval logic
-    // In a real implementation, this would contain logic to approve pending workflows
-    core.info('✅ Action executed successfully');
+    // Example cleanup logic - this could include:
+    // - Cleaning up temporary resources
+    // - Sending notifications
+    // - Updating status
+    // - Logging final results
     
-    // Set outputs
-    core.setOutput('result', 'success');
-    
-    // Save state for post step
-    core.saveState('main-result', 'success');
+    core.info('✅ Post-step completed successfully');
     
   } catch (error) {
-    // Save error state for post step
-    core.saveState('main-result', 'failed');
-    core.setFailed(`Action failed with error: ${error.message}`);
+    // Post steps should not fail the overall action
+    core.warning(`Post-step failed with error: ${error.message}`);
   }
 }
 
-// Run the action
-run();
+// Run the post action
+runPost();
 module.exports = __webpack_exports__;
 /******/ })()
 ;

@@ -4,7 +4,7 @@
   "description": "A custom GitHub Action that runs Node.js to approve workflows",
   "main": "index.js",
   "scripts": {
-    "build": "ncc build index.js -o dist",
+    "build": "ncc build index.js -o dist && ncc build post.js -o dist-post && cp dist-post/index.js dist/post.js && rm -rf dist-post",
     "start": "node index.js",
     "test": "echo \"No tests specified\" && exit 0"
   },
