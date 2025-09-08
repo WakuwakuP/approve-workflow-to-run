@@ -1,0 +1,25 @@
+name: 'Approve Workflow to Run'
+description: 'A custom GitHub Action that runs Node.js to approve workflows'
+author: 'WakuwakuP'
+
+inputs:
+  github-token:
+    description: 'GitHub token for authentication'
+    required: false
+  workflow-name:
+    description: 'Name of the workflow to approve'
+    required: false
+    default: ''
+
+outputs:
+  result:
+    description: 'Result of the approval action'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+  post: 'dist/post.js'
+
+branding:
+  icon: 'check-circle'
+  color: 'green'
