@@ -5,8 +5,7 @@ author: 'WakuwakuP'
 inputs:
   github-token:
     description: 'GitHub token for authentication'
-    required: true
-    default: ${{ github.token }}
+    required: false
   workflow-name:
     description: 'Name of the workflow to approve'
     required: false
@@ -18,7 +17,7 @@ outputs:
 
 runs:
   using: 'node20'
-  main: 'index.js'
+  main: 'dist/index.js'
 
 branding:
   icon: 'check-circle'
