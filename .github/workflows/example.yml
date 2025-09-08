@@ -1,0 +1,21 @@
+name: Example Usage
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Use Approve Workflow Action
+      uses: ./
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        workflow-name: 'example-workflow'
