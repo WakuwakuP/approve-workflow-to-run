@@ -40,25 +40,9 @@ async function runPost() {
       
       core.info(`Found ${workflowRuns.total_count} workflow runs waiting for approval`);
       
-      let workflowRunsToApprove = workflowRuns.workflow_runs;
-      
-      // For pull request events, filter workflow runs for the current pull request
-      if (context.eventName === 'pull_request' || context.eventName === 'pull_request_target') {
-        const prNumber = context.payload.pull_request?.number;
-        if (prNumber) {
-          workflowRunsToApprove = workflowRuns.workflow_runs.filter(run => 
-            Array.isArray(run.pull_requests) && run.pull_requests.length > 0 && run.pull_requests.some(pr => pr.number === prNumber)
-          );
-          
-          core.info(`Found ${workflowRunsToApprove.length} workflow runs for PR #${prNumber}`);
-        } else {
-          core.warning('Pull request number not found in context');
-          workflowRunsToApprove = [];
-        }
-      } else {
-        // For non-PR events (like workflow_dispatch, push, etc.), approve all waiting workflow runs
-        core.info(`Found ${workflowRunsToApprove.length} workflow runs for ${context.eventName} event`);
-      }
+      // Approve all waiting workflow runs for the current event type
+      const workflowRunsToApprove = workflowRuns.workflow_runs;
+      core.info(`Found ${workflowRunsToApprove.length} workflow runs for ${context.eventName} event`);
       
       // Approve each workflow run
       for (const run of workflowRunsToApprove) {

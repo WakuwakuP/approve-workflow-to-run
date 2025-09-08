@@ -5,12 +5,12 @@ A custom GitHub Action that runs Node.js to approve workflows.
 ## Features
 
 - **Main Step**: Initializes the action and prepares for workflow approval
-- **Post Step**: Automatically approves workflows for pull request events (always runs, even if main step fails)
+- **Post Step**: Automatically approves waiting workflows for any event type (always runs, even if main step fails)
 - Accepts optional GitHub token for authentication
 - Supports optional workflow name specification
 - Proper error handling and logging
 - State management between main and post steps
-- **Pull Request Workflow Approval**: Automatically approves pending workflow runs for pull requests
+- **Workflow Approval**: Automatically approves pending workflow runs for any event type
 
 ## Usage
 
@@ -49,20 +49,16 @@ jobs:
 
 ### Workflow Approval
 
-The post step will check for and approve workflow runs that are waiting for approval:
+The post step will check for and approve workflow runs that are waiting for approval for any event type:
 
-**For pull request events** (`pull_request` or `pull_request_target`):
-1. Check for workflow runs that are waiting for approval
-2. Filter workflow runs associated with the current pull request
-3. Automatically approve those workflow runs using the GitHub API
+1. Check for workflow runs that are waiting for approval for the current event type
+2. Automatically approve all waiting workflow runs using the GitHub API
+3. Log the approval results
 
-**For other event types** (such as `workflow_dispatch`, `push`, `schedule`, etc.):
-1. Check for workflow runs that are waiting for approval
-2. Automatically approve all waiting workflow runs for the event type
-4. Log the approval results
+This simplified approach works uniformly across all event types including `pull_request`, `pull_request_target`, `workflow_dispatch`, `push`, `schedule`, and others.
 
 The post step has access to the main step's execution result through saved state and can perform operations such as:
-- Approving pending workflow runs for pull requests
+- Approving pending workflow runs for any event type
 - Cleaning up temporary resources
 - Sending notifications
 - Updating status
