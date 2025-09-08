@@ -45,7 +45,7 @@ async function runPost() {
         const prNumber = context.payload.pull_request?.number;
         if (prNumber) {
           const prWorkflowRuns = workflowRuns.workflow_runs.filter(run => 
-            run.pull_requests && run.pull_requests.some(pr => pr.number === prNumber)
+            Array.isArray(run.pull_requests) && run.pull_requests.length > 0 && run.pull_requests.some(pr => pr.number === prNumber)
           );
           
           core.info(`Found ${prWorkflowRuns.length} workflow runs for PR #${prNumber}`);
