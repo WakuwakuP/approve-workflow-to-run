@@ -4,12 +4,13 @@ A custom GitHub Action that runs Node.js to approve workflows.
 
 ## Features
 
-- **Main Step**: Executes the primary workflow approval logic
-- **Post Step**: Runs cleanup tasks after the main step completes (always runs, even if main step fails)
+- **Main Step**: Initializes the action and prepares for workflow approval
+- **Post Step**: Automatically approves workflows for pull request events (always runs, even if main step fails)
 - Accepts optional GitHub token for authentication
 - Supports optional workflow name specification
 - Proper error handling and logging
 - State management between main and post steps
+- **Pull Request Workflow Approval**: Automatically approves pending workflow runs for pull requests
 
 ## Usage
 
@@ -43,10 +44,19 @@ jobs:
 
 ## Execution Flow
 
-1. **Main Step** (`dist/index.js`): Executes the primary workflow approval logic
-2. **Post Step** (`dist/post.js`): Runs cleanup tasks and logs final results (always executes, regardless of main step outcome)
+1. **Main Step** (`dist/index.js`): Initializes the action, validates inputs, and prepares the GitHub API client
+2. **Post Step** (`dist/post.js`): Handles workflow approval for pull request events (always executes, regardless of main step outcome)
 
-The post step has access to the main step's execution result through saved state and can perform cleanup operations such as:
+### Pull Request Workflow Approval
+
+When triggered by a pull request event (`pull_request` or `pull_request_target`), the post step will:
+1. Check for workflow runs that are waiting for approval
+2. Filter workflow runs associated with the current pull request
+3. Automatically approve those workflow runs using the GitHub API
+4. Log the approval results
+
+The post step has access to the main step's execution result through saved state and can perform operations such as:
+- Approving pending workflow runs for pull requests
 - Cleaning up temporary resources
 - Sending notifications
 - Updating status
